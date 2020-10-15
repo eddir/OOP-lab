@@ -5,7 +5,16 @@ namespace OOP
 {
     class Program
     {
-        static void Main(string[] args)
+        // Включить ли режим быстрой отладки
+        static private readonly bool TEST_MODE = false;
+
+        // Перебор всех подстановок 8 ферзей на 64 клеточной доски
+        static private readonly string METHOD_BRUTE_FORCE_ALL = "1";
+
+        // Перебор всех подстановок за исключением повторов по вертикали и горизонтали
+        static private readonly string METHOD_EXCLUDE_LINES_DUBLICATE = "2";
+
+        static void Test(string[] args)
         {
             uint solution = 9032142;
             byte[,] matrix = new byte[8, 8];
@@ -27,49 +36,46 @@ namespace OOP
             PrintMatrix(matrix);
         }
 
-        static void Mainn(string[] args)
+        static void Main(string[] args)
         {
-            string answer;
+            string answer, method;
+            uint limit;
             Console.WriteLine("Задача о восьми ферзях");
 
 
             try
             {
-                Console.WriteLine("Укажите количество решений:");
-                //answer = Console.ReadLine();
-                answer = "2";
-                uint solution = 0;
-                uint limit = uint.Parse(answer);
+                if (!TEST_MODE)
+                {
+                    Console.WriteLine("Укажите количество решений:");
+                    answer = Console.ReadLine();
+                    limit = uint.Parse(answer);
 
-                int amount = 0;
+                    do
+                    {
+                        Console.WriteLine("Выберите метод решения [1,2]: \n\n1. Перебор всех расположений 8 ферзей на 64 клетках\n" +
+                        "2. Исключить повторы на вертикалях и горизонталях");
+                        method = Console.ReadLine();
+                    } while (!(method == METHOD_BRUTE_FORCE_ALL || method == METHOD_EXCLUDE_LINES_DUBLICATE));
+                } else
+                {
+                    limit = 92;
+                    method = METHOD_EXCLUDE_LINES_DUBLICATE;
+                }
+
                 try
                 {
-                    byte k = 0;
-                    byte i = 0;
-                    while (solution < 16777216 && amount < limit)
+                    var watch = System.Diagnostics.Stopwatch.StartNew();
+                    int amount = 0;
+
+                    if (method == METHOD_BRUTE_FORCE_ALL)
                     {
-                        byte[,] matrix = new byte[8, 8];
-                        for (i = 0; i < 8; i++)
-                        {
-                            k = (byte)(solution / Math.Pow(8, i) % 8);
-                            matrix[i, k] = 1;
-                        }
-
-                        if (solution == 8937054)
-                        {
-                            PrintMatrix(matrix);
-
-                        }
-                        if (Program.TestSolution(matrix))
-                        {
-                            PrintMatrix(matrix);
-                            amount++;
-                        }
-
-                        solution++;
+                        amount = MethodBruteForceAll(limit);
+                    } else if (method == METHOD_EXCLUDE_LINES_DUBLICATE) {
+                        amount = MethodExcludeLinesDublicate(limit);
                     }
-
-                    Console.WriteLine("amount = {0}", amount);
+                    watch.Stop();
+                    Console.WriteLine("Решений найдено = {0}\nЗатрачено времени = {1} сек.", amount, watch.ElapsedMilliseconds / 1000);
                 }
                 catch (StackOverflowException e)
                 {
@@ -87,7 +93,7 @@ namespace OOP
                     var frame = st.GetFrame(0);
                     // Get the line number from the stack frame
                     var line = frame.GetFileLineNumber();
-                    Console.WriteLine("Ошибка на строке {0}", line);
+                    Console.WriteLine("Ошибка на строке {0}, {1}", line, e.Message);
                 }
 
             }
@@ -109,6 +115,65 @@ namespace OOP
             }
         }
 
+        public static int MethodBruteForceAll(uint limit)
+        {
+            uint solution = 0;
+            int amount = 0;
+
+            byte i, k;
+            while (solution < 16777216 && amount < limit)
+            {
+                byte[,] matrix = new byte[8, 8];
+                for (i = 0; i < 8; i++)
+                {
+                    k = (byte)(solution / Math.Pow(8, i) % 8);
+                    matrix[i, k] = 1;
+                }
+                if (Program.TestSolution(matrix))
+                {
+                    Console.WriteLine("{0}.", ++amount);
+                    PrintMatrix(matrix);
+                }
+
+                solution++;
+            }
+            return amount;
+        }
+
+        public static int MethodExcludeLinesDublicate(uint limit)
+        {
+            uint solution = 0;
+            int amount = 0;
+
+            byte i, k, j;
+            bool skeep;
+            while (solution < 16777216 && amount < limit)
+            {
+                skeep = false;
+                byte[,] matrix = new byte[8, 8];
+                for (i = 0; i < 8 && skeep == false; i++)
+                {
+                    k = (byte)(solution / Math.Pow(8, i) % 8);
+                    matrix[i, k] = 1;
+                    for (j = 0; j < i && skeep == false; j++)
+                    {
+                        if (matrix[j, k] == 1)
+                        {
+                            skeep = true;
+                        }
+                    }
+                }
+                if (skeep == false && Program.TestSolutionHorizontal(matrix))
+                {
+                    Console.WriteLine("{0}.", ++amount);
+                    PrintMatrix(matrix);
+                }
+
+                solution++;
+            }
+            return amount;
+        }
+
         public static byte CountBits(uint number)
         {
             byte count = 0;
@@ -118,6 +183,46 @@ namespace OOP
                 number &= (byte)(number - 1);
             }
             return count;
+        }
+
+        public static bool TestSolutionHorizontal(byte[,] solution)
+        {
+            byte x, y, j;
+            for (byte i = 0; i < 8; i++)
+            {
+                for (byte k = 0; k < 8; k++)
+                {
+                    if (solution[i, k] == 1)
+                    {
+                        byte ci, ck;
+                        ci = (byte)((k < i) ? i - k : 0);
+                        ck = (byte)((i < k) ? k - i : 0);
+                        for (j = 0; j <= 7 - Math.Abs(i - k); j++)
+                        {
+                            x = (byte)(j + ci);
+                            y = (byte)(j + ck);
+                            if (x != i && solution[x, y] == 1)
+                            {
+                                return false;
+                            }
+                        }
+
+                        ci = (byte)((7 - k < i) ? i - (7 - k) : 0);
+                        ck = (byte)((7 - k < i) ? 7 : i + k);
+                        for (j = 0; j <= Math.Abs(ci - ck); j++)
+                        {
+                            x = (byte)(j + ci);
+                            y = (byte)(ck - j);
+                            if (!(x == i && y == k) && solution[x, y] == 1)
+                            {
+                                return false;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return true;
         }
 
         public static bool TestSolution(byte[,] solution)
@@ -143,36 +248,12 @@ namespace OOP
                                 return false;
                             }
                         }
-                        byte ci, ck;
-                        ci = (byte)((k < i) ? i - k : 0);
-                        ck = (byte)((i < k) ? k - i : 0);
-                        for (j = 0; j < 8; j++)
-                        {
-                            x = (byte)(j + ci);
-                            y = (byte)(j + ck);
-                            /*
-                            if (x != i && solution[x, y] == 1)
-                            {
-                                return false;
-                            }*/
-                        }
-
-                        for (j = 0; j < 8; j++)
-                        {
-                            x = (byte)(j - ci);
-                            y = (byte)(ck - j);
-                            if (!(x == i && y == k) && !(y > 7 || x > 7) && solution[x, y] == 1)
-                            {
-                                return false;
-                            }
-                        }
-
                     }
                 }
             }
-            return true;
+            return TestSolutionHorizontal(solution);
         }
-
+        
         public static void PrintMatrix(byte[,] solution)
         {
             for (byte i = 0; i < 8; i++)
