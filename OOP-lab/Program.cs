@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.CompilerServices;
 
 namespace OOP
 {
@@ -26,7 +24,7 @@ namespace OOP
             {
                 Console.WriteLine("Неудача");
             }
-            printMatrix(matrix);
+            PrintMatrix(matrix);
         }
 
         static void Mainn(string[] args)
@@ -59,12 +57,12 @@ namespace OOP
 
                         if (solution == 8937054)
                         {
-                            printMatrix(matrix);
+                            PrintMatrix(matrix);
 
                         }
                         if (Program.TestSolution(matrix))
                         {
-                            printMatrix(matrix);
+                            PrintMatrix(matrix);
                             amount++;
                         }
 
@@ -75,11 +73,11 @@ namespace OOP
                 }
                 catch (StackOverflowException e)
                 {
-                    Program.writeError("Произошло переполнение стека.", e);
+                    Program.WriteError("Произошло переполнение стека.", e);
                 }
                 catch (OverflowException e)
                 {
-                    Program.writeError("Произошло переполнение.", e);
+                    Program.WriteError("Произошло переполнение.", e);
                 }
                 catch (Exception e)
                 {
@@ -95,23 +93,23 @@ namespace OOP
             }
             catch (OverflowException)
             {
-                Program.writeError("Введено слишком большое число решений.");
+                Program.WriteError("Введено слишком большое число решений.");
             }
             catch (ArgumentNullException)
             {
-                Program.writeError("Количество решений не введено.");
+                Program.WriteError("Количество решений не введено.");
             }
             catch (FormatException)
             {
-                Program.writeError("Введено некорректное значение решений.");
+                Program.WriteError("Введено некорректное значение решений.");
             }
             catch (Exception e)
             {
-                Program.writeError("Произошла неизвестная ошибка.", e);
+                Program.WriteError("Произошла неизвестная ошибка.", e);
             }
         }
 
-        public static byte countBits(uint number)
+        public static byte CountBits(uint number)
         {
             byte count = 0;
             while (number != 0)
@@ -175,9 +173,8 @@ namespace OOP
             return true;
         }
 
-        public static void printMatrix(byte[,] solution)
+        public static void PrintMatrix(byte[,] solution)
         {
-            byte x, y, j;
             for (byte i = 0; i < 8; i++)
             {
                 for (byte k = 0; k < 8; k++)
@@ -189,7 +186,7 @@ namespace OOP
             Console.WriteLine();
         }
 
-        public static void writeError(string message)
+        public static void WriteError(string message)
         {
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Red;
@@ -197,7 +194,7 @@ namespace OOP
             Console.WriteLine(message);
         }
 
-        public static void writeError(string message, Exception exception)
+        public static void WriteError(string message, Exception exception)
         {
             Console.Clear();
             Console.BackgroundColor = ConsoleColor.Red;
