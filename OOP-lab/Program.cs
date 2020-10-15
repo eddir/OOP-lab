@@ -39,7 +39,7 @@ namespace OOP
         static void Main(string[] args)
         {
             string answer, method;
-            uint limit;
+            byte limit;
             Console.WriteLine("Задача о восьми ферзях");
 
 
@@ -49,7 +49,7 @@ namespace OOP
                 {
                     Console.WriteLine("Укажите количество решений:");
                     answer = Console.ReadLine();
-                    limit = uint.Parse(answer);
+                    limit = byte.Parse(answer);
 
                     do
                     {
@@ -115,7 +115,7 @@ namespace OOP
             }
         }
 
-        public static int MethodBruteForceAll(uint limit)
+        public static int MethodBruteForceAll(byte limit)
         {
             uint solution = 0;
             int amount = 0;
@@ -140,7 +140,7 @@ namespace OOP
             return amount;
         }
 
-        public static int MethodExcludeLinesDublicate(uint limit)
+        public static int MethodExcludeLinesDublicate(byte limit)
         {
             uint solution = 0;
             int amount = 0;
@@ -260,9 +260,9 @@ namespace OOP
             {
                 for (byte k = 0; k < 8; k++)
                 {
-                    Console.Write("{0} ", solution[i, k]);
+                    Console.Write("{0}", solution[i, k] == 0 ? "|_" : "|#");
                 }
-                Console.WriteLine();
+                Console.WriteLine("|");
             }
             Console.WriteLine();
         }
@@ -270,16 +270,21 @@ namespace OOP
         public static void WriteError(string message)
         {
             Console.Clear();
+            Console.Write("     ");
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine("     Ошибка!\n");
+            Console.WriteLine("Ошибка!\n");
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine(message);
+            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         public static void WriteError(string message, Exception exception)
         {
             Console.Clear();
+            Console.Write("     ");
             Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine("     Ошибка!\n");
+            Console.WriteLine("Ошибка!\n");
+            Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine(message);
             Console.WriteLine("Описание ошибки: {0}\nИсточник: {1}", exception.Message, exception.Source);
         }
