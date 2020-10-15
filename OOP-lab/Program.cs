@@ -7,8 +7,29 @@ namespace OOP
 {
     class Program
     {
-
         static void Main(string[] args)
+        {
+            uint solution = 9032142;
+            byte[,] matrix = new byte[8, 8];
+            int i;
+            for (i = 0; i < 8; i++)
+            {
+                byte k = (byte)(solution / Math.Pow(8, i) % 8);
+                matrix[i, k] = 1;
+            }
+
+            if (TestSolution(matrix))
+            {
+                Console.WriteLine("Успех");
+            }
+            else
+            {
+                Console.WriteLine("Неудача");
+            }
+            printMatrix(matrix);
+        }
+
+        static void Mainn(string[] args)
         {
             string answer;
             Console.WriteLine("Задача о восьми ферзях");
@@ -32,7 +53,7 @@ namespace OOP
                         byte[,] matrix = new byte[8, 8];
                         for (i = 0; i < 8; i++)
                         {
-                            k = (byte) (solution / Math.Pow(8, i) % 8);
+                            k = (byte)(solution / Math.Pow(8, i) % 8);
                             matrix[i, k] = 1;
                         }
 
@@ -46,18 +67,21 @@ namespace OOP
                             printMatrix(matrix);
                             amount++;
                         }
-                        
+
                         solution++;
                     }
 
                     Console.WriteLine("amount = {0}", amount);
-                } catch (StackOverflowException e)
+                }
+                catch (StackOverflowException e)
                 {
-                    Program.writeError("Произошло переполнение стека.",e);
-                } catch (OverflowException e)
+                    Program.writeError("Произошло переполнение стека.", e);
+                }
+                catch (OverflowException e)
                 {
                     Program.writeError("Произошло переполнение.", e);
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     // Get stack trace for the exception with source file information
                     var st = new StackTrace(e, true);
@@ -68,13 +92,20 @@ namespace OOP
                     Console.WriteLine("Ошибка на строке {0}", line);
                 }
 
-            } catch (OverflowException) {
+            }
+            catch (OverflowException)
+            {
                 Program.writeError("Введено слишком большое число решений.");
-            } catch (ArgumentNullException) {
+            }
+            catch (ArgumentNullException)
+            {
                 Program.writeError("Количество решений не введено.");
-            } catch (FormatException) {
+            }
+            catch (FormatException)
+            {
                 Program.writeError("Введено некорректное значение решений.");
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 Program.writeError("Произошла неизвестная ошибка.", e);
             }
@@ -86,7 +117,7 @@ namespace OOP
             while (number != 0)
             {
                 count++;
-                number &= (byte) (number - 1);
+                number &= (byte)(number - 1);
             }
             return count;
         }
@@ -98,7 +129,7 @@ namespace OOP
             {
                 for (byte k = 0; k < 8; k++)
                 {
-                    if (solution[i,k] == 1)
+                    if (solution[i, k] == 1)
                     {
                         for (x = 0; x < 8; x++)
                         {
@@ -114,32 +145,30 @@ namespace OOP
                                 return false;
                             }
                         }
-                        for (j = 1; j < 8; j++)
+                        byte ci, ck;
+                        ci = (byte)((k < i) ? i - k : 0);
+                        ck = (byte)((i < k) ? k - i : 0);
+                        for (j = 0; j < 8; j++)
                         {
-                            x = (byte)((byte)(i + j) % 8);
-                            y = (byte)((byte)(k + j) % 8);
-                            if (x == i)
+                            x = (byte)(j + ci);
+                            y = (byte)(j + ck);
+                            /*
+                            if (x != i && solution[x, y] == 1)
                             {
-                                break;
-                            }
-                            else if (solution[x, y] == 1)
+                                return false;
+                            }*/
+                        }
+
+                        for (j = 0; j < 8; j++)
+                        {
+                            x = (byte)(j - ci);
+                            y = (byte)(ck - j);
+                            if (!(x == i && y == k) && !(y > 7 || x > 7) && solution[x, y] == 1)
                             {
                                 return false;
                             }
                         }
-                        for (j = 1; j < 8; j++)
-                        {
-                            x = (byte)(7 - (byte)((byte)(i + j) % 8));
-                            y = (byte)(7 - (byte)((byte)(k + j) % 8));
-                            if (y == k)
-                            {
-                                break;
-                            }
-                            else if (solution[x, y] == 1)
-                            {
-                                return false;
-                            }
-                        }
+
                     }
                 }
             }
@@ -180,3 +209,6 @@ namespace OOP
     }
 
 }
+
+
+
