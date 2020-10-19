@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OOP;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -7,8 +8,6 @@ namespace OOP_lab
 {
     class Task4
     {
-        // Включить ли режим быстрой отладки
-        static private readonly bool TEST_MODE = false;
 
         // Перебор всех подстановок 8 ферзей на 64 клеточной доски
         static private readonly string METHOD_BRUTE_FORCE_ALL = "1";
@@ -25,7 +24,7 @@ namespace OOP_lab
 
             try
             {
-                if (!TEST_MODE)
+                if (!Program.TEST_MODE)
                 {
                     Console.WriteLine("Укажите количество решений:");
                     answer = Console.ReadLine();
