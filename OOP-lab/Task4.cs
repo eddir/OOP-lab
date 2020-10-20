@@ -74,19 +74,19 @@ namespace OOP_lab
             }
             catch (ArgumentNullException)
             {
-                Task4.WriteError("Количество решений не введено.");
+                Program.WriteError("Количество решений не введено.");
             }
             catch (OverflowException)
             {
-                Task4.WriteError("Введено слишком большое число решений.");
+                Program.WriteError("Введено слишком большое число решений.");
             }
             catch (FormatException)
             {
-                Task4.WriteError("Введено некорректное значение решений.");
+                Program.WriteError("Введено некорректное значение решений.");
             }
             catch (Exception e)
             {
-                Task4.WriteError("Произошла неизвестная ошибка.", e);
+                Program.WriteError("Произошла неизвестная ошибка.", e);
             }
         }
 
@@ -242,26 +242,5 @@ namespace OOP_lab
             Console.WriteLine();
         }
 
-        public static void WriteError(string message)
-        {
-            Console.Clear();
-            Console.Write("     ");
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ошибка!\n");
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.WriteLine(message);
-            Console.BackgroundColor = ConsoleColor.Black;
-        }
-
-        public static void WriteError(string message, Exception exception)
-        {
-            Console.Clear();
-            Console.Write("     ");
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine("Ошибка!\n");
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.WriteLine(message);
-            Console.WriteLine("{2}\nОписание ошибки: {0}\nИсточник: {1}", exception.Message, exception.Source, exception.GetType().Name);
-        }
     }
 }
