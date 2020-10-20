@@ -20,6 +20,7 @@ namespace OOP
             Console.WriteLine("4. Обработка стандартных исключений (задача о 8 ферзях).");
             Console.WriteLine("5. Генерация исключений (общественный транспорт Казани).");
             Console.WriteLine("6. Одномерные массивы (неубывающая последовательность).");
+            Console.WriteLine("7. Многомерные массивы (произведения элементов).");
 
             byte task;
 
@@ -31,7 +32,7 @@ namespace OOP
                 }
                 else
                 {
-                    task = 5;
+                    task = 7;
                 }
             }
             catch
@@ -53,6 +54,9 @@ namespace OOP
                     case 6:
                         Task6.Start();
                         break;
+                    case 7:
+                        Task7.Start();
+                        break;
                     default:
                         Console.WriteLine("Задача не найдена.");
                         break;
@@ -60,9 +64,62 @@ namespace OOP
             }
             catch (Exception e)
             {
-                Console.WriteLine("Произошла неизвестная ошибка. {0}", e.Message);
+                var st = new StackTrace(e, true);
+                // Get the top stack frame
+                var frame = st.GetFrame(0);
+                // Get the line number from the stack frame
+                var line = frame.GetFileLineNumber();
+                Console.WriteLine("Произошла неизвестная ошибка. \n{0} \n{1}, {2}", e.Message, frame, line);
             }
 
+        }
+
+        public static byte[] RandomArray(int size, int max)
+        {
+            Random rnd = new Random();
+            byte[] array = new byte[size];
+
+            for (byte i = 0; i < size; i++)
+            {
+                array[i] = (byte)(rnd.Next() % max);
+            }
+
+            return array;
+        }
+
+        public static byte[] RandomArray(int size)
+        {
+            return RandomArray(size, 100);
+        }
+
+        public static byte[][] Random2DArray(int sizeX, int sizeY, int max)
+        {
+            byte[][] array = new byte[sizeX][];
+
+            for (byte i = 0; i < sizeX; i++)
+            {
+                array[i] = Program.RandomArray(sizeY, max);
+            }
+
+            return array;
+        }
+
+        public static byte[][] Random2DArray(int sizeX, int sizeY)
+        {
+            return Random2DArray(sizeX, sizeY, 100);
+        }
+
+        public static void printArray(byte[] elements)
+        {
+            for (byte i = 0; i < elements.Length; i++)
+            {
+                Console.Write("{0}", elements[i]);
+                if (i < elements.Length - 1)
+                {
+                    Console.Write(", ");
+                }
+            }
+            Console.WriteLine();
         }
 
         public static void WriteError(string message)
