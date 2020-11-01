@@ -79,6 +79,8 @@ namespace OOP_lab
             public Student(string fio, DateTime birthdate, string group)
             {
                 SetFio(fio);
+                SetBirthdate(birthdate);
+                SetGroup(group);
             }
 
             public void SetFio(string fio)
@@ -99,7 +101,7 @@ namespace OOP_lab
                 this.fio = fio;
             }
 
-            public void setBirthdate(DateTime birthdate)
+            public void SetBirthdate(DateTime birthdate)
             {
                 if (birthdate.Year < DateTime.Now.Year - 100)
                 {
