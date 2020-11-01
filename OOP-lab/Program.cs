@@ -24,6 +24,7 @@ namespace OOP
                 new Task6(),
                 new Task7(),
                 new Task8(),
+                new Task9(),
             };
 
             for (int i = 0; i < tasks.Count; i++)
