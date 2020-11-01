@@ -6,10 +6,16 @@ using System.Text;
 
 namespace OOP_lab
 {
-    class Task8
+    class Task8: Task
     {
 
-        public static void Start()
+        public Task8()
+        {
+            number = 8;
+            description = "Строки (поиск вхождений в словах).";
+        }
+
+        public override void Start()
         {
             bool forceTestArgs = false;
             string text = "", word = "";

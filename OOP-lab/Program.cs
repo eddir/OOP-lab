@@ -1,28 +1,35 @@
 ﻿using OOP_lab;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Task = OOP_lab.Task;
 
 namespace OOP
 {
     class Program
     {
         // Включить ли режим быстрой отладки
-        static public readonly bool TEST_MODE = true;
+        static public readonly bool TEST_MODE = false;
 
         public static void Main(string[] args)
         {
             Console.WriteLine("Лабораторные работа по дисциплине \"Объетно ориентированное программирование\"");
             Console.WriteLine("Выполнил студент группы бПИНЖ21 Ростков Э.А.");
 
+            List<Task> tasks = new List<Task>{
+                new Task4(),
+                new Task5(),
+                new Task6(),
+                new Task7(),
+                new Task8(),
+            };
 
-            Console.WriteLine("\nВыберите номер задачи [4]:");
-            Console.WriteLine("4. Обработка стандартных исключений (задача о 8 ферзях).");
-            Console.WriteLine("5. Генерация исключений (общественный транспорт Казани).");
-            Console.WriteLine("6. Одномерные массивы (неубывающая последовательность).");
-            Console.WriteLine("7. Многомерные массивы (произведения элементов).");
-            Console.WriteLine("8. Строки (поиск вхождений в словах).");
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                Console.WriteLine("{0}. {1}", tasks[i].getNumber(), tasks[i].getDescription());
+            }
             Console.WriteLine("");
 
             byte task;
@@ -35,7 +42,7 @@ namespace OOP
                 }
                 else
                 {
-                    task = 9;
+                    task = 8;
                 }
             }
             catch
@@ -46,26 +53,18 @@ namespace OOP
 
             try
             {
-                switch (task)
+                bool exc = false;
+                foreach (Task t in tasks)
                 {
-                    case 4:
-                        Task4.Start();
-                        break;
-                    case 5:
-                        Task5.Start();
-                        break;
-                    case 6:
-                        Task6.Start();
-                        break;
-                    case 7:
-                        Task7.Start();
-                        break;
-                    case 8:
-                        Task8.Start();
-                        break;
-                    default:
-                        Console.WriteLine("Задача не найдена.");
-                        break;
+                    if (t.getNumber() == task)
+                    {
+                        t.Start();
+                        exc = true;
+                    }
+                }
+                if (!exc)
+                {
+                    Console.WriteLine("Задача не найдена.");
                 }
             }
             catch (Exception e)

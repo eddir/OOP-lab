@@ -6,9 +6,16 @@ using System.Text;
 
 namespace OOP_lab
 {
-    class Task6
+    class Task6: Task
     {
-        public static void Start()
+
+        public Task6()
+        {
+            number = 6;
+            description = "Одномерные массивы (неубывающая последовательность).";
+        }
+
+        public override void Start()
         {
             try
             {

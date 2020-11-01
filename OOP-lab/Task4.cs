@@ -6,8 +6,16 @@ using System.Text;
 
 namespace OOP_lab
 {
-    class Task4
+    class Task4: Task
     {
+        // Почему в c# нельзя переопределить унаследованные переменные прямо в теле классе вне методов, как в Java, PHP?
+        // protected byte number = 4; <- не работает
+
+        public Task4()
+        {
+            number = 4;
+            description = "Обработка стандартных исключений (задача о 8 ферзях).";
+        }
 
         // Перебор всех подстановок 8 ферзей на 64 клеточной доски
         static private readonly string METHOD_BRUTE_FORCE_ALL = "1";
@@ -15,7 +23,7 @@ namespace OOP_lab
         // Перебор всех подстановок за исключением повторов по вертикали и горизонтали
         static private readonly string METHOD_EXCLUDE_LINES_DUBLICATE = "2";
 
-        public static void Start()
+        public override void Start()
         {
             string answer, method;
             byte limit;

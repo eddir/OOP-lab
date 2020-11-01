@@ -10,9 +10,16 @@ using System.Web;
 
 namespace OOP_lab
 {
-    class Task5
+    class Task5: Task
     {
-        public static void Start()
+
+        public Task5()
+        {
+            number = 5;
+            description = "Генерация исключений (общественный транспорт Казани).";
+        }
+
+        public override void Start()
         {
             string bus;
             try

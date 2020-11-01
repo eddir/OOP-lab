@@ -5,9 +5,16 @@ using System.Text;
 
 namespace OOP_lab
 {
-    class Task7
+    class Task7: Task
     {
-        public static void Start()
+
+        public Task7()
+        {
+            number = 7;
+            description = "Многомерные массивы (произведения элементов).";
+        }
+
+        public override void Start()
         {
             int sizeX = 10, sizeY = 10;
             Console.WriteLine("Написать и протестировать метод, находящий произведение  элементов каждой строки заданного " +
