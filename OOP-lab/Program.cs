@@ -9,18 +9,21 @@ namespace OOP
     class Program
     {
         // Включить ли режим быстрой отладки
-        static public readonly bool TEST_MODE = false;
+        static public readonly bool TEST_MODE = true;
 
         public static void Main(string[] args)
         {
             Console.WriteLine("Лабораторные работа по дисциплине \"Объетно ориентированное программирование\"");
             Console.WriteLine("Выполнил студент группы бПИНЖ21 Ростков Э.А.");
 
+
             Console.WriteLine("\nВыберите номер задачи [4]:");
             Console.WriteLine("4. Обработка стандартных исключений (задача о 8 ферзях).");
             Console.WriteLine("5. Генерация исключений (общественный транспорт Казани).");
             Console.WriteLine("6. Одномерные массивы (неубывающая последовательность).");
             Console.WriteLine("7. Многомерные массивы (произведения элементов).");
+            Console.WriteLine("8. Строки (поиск вхождений в словах).");
+            Console.WriteLine("");
 
             byte task;
 
@@ -32,7 +35,7 @@ namespace OOP
                 }
                 else
                 {
-                    task = 7;
+                    task = 9;
                 }
             }
             catch
@@ -57,6 +60,9 @@ namespace OOP
                     case 7:
                         Task7.Start();
                         break;
+                    case 8:
+                        Task8.Start();
+                        break;
                     default:
                         Console.WriteLine("Задача не найдена.");
                         break;
@@ -72,6 +78,7 @@ namespace OOP
                 Console.WriteLine("Произошла неизвестная ошибка. \n{0} \n{1}, {2}", e.Message, frame, line);
             }
 
+            Console.WriteLine("\n");
         }
 
         public static byte[] RandomArray(int size, int max)
