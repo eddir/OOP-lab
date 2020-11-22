@@ -11,7 +11,7 @@ namespace OOP_lab
 
         public Task8()
         {
-            number = 8;
+            number = '8';
             description = "Строки (поиск вхождений в словах).";
         }
 

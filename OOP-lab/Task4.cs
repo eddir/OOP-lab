@@ -13,7 +13,7 @@ namespace OOP_lab
 
         public Task4()
         {
-            number = 4;
+            number = '4';
             description = "Обработка стандартных исключений (задача о 8 ферзях).";
         }
 

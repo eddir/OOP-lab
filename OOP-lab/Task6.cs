@@ -11,7 +11,7 @@ namespace OOP_lab
 
         public Task6()
         {
-            number = 6;
+            number = '6';
             description = "Одномерные массивы (неубывающая последовательность).";
         }
 

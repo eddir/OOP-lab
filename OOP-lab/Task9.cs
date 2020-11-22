@@ -11,7 +11,7 @@ namespace OOP_lab
 
         public Task9()
         {
-            number = 9;
+            number = '9';
             description = "Описание классов (описать класс СТУДЕНТ)";
         }
 

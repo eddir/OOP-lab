@@ -6,13 +6,13 @@ namespace OOP_lab
 {
     public abstract class Task
     {
-        protected byte number;
+        protected char number;
 
         protected string description;
 
         public abstract void Start();
 
-        public byte getNumber()
+        public char getNumber()
         {
             return this.number;
         }

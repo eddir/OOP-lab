@@ -11,7 +11,7 @@ namespace OOP
         // Включить ли режим быстрой отладки
         public const bool TEST_MODE = false;
         
-        private const byte DEFAULT_TASK = 9;
+        private const char DEFAULT_TASK = '9';
 
         public static void Main(string[] args)
         {
@@ -25,6 +25,7 @@ namespace OOP
                 new Task7(),
                 new Task8(),
                 new Task9(),
+                new Task9_1(),
             };
 
             while (true)
@@ -35,13 +36,13 @@ namespace OOP
                 }
                 Console.WriteLine("");
 
-                byte task;
+                char task;
 
                 try
                 {
                     if (!TEST_MODE)
                     {
-                        task = byte.Parse(Console.ReadKey().KeyChar.ToString());
+                        task = Console.ReadKey().KeyChar;
                         Console.WriteLine();
                     }
                     else
@@ -55,7 +56,7 @@ namespace OOP
                     task = DEFAULT_TASK;
                 }
 
-                if (task == 0)
+                if (task == '0' || task == 'q')
                 {
                     break;
                 }

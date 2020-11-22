@@ -10,7 +10,7 @@ namespace OOP_lab
 
         public Task7()
         {
-            number = 7;
+            number = '7';
             description = "Многомерные массивы (произведения элементов).";
         }
 

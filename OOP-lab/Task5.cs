@@ -15,7 +15,7 @@ namespace OOP_lab
 
         public Task5()
         {
-            number = 5;
+            number = '5';
             description = "Генерация исключений (общественный транспорт Казани).";
         }
 
@@ -222,9 +222,6 @@ namespace OOP_lab
                 myStreamReader.Close();
                 responseStream.Close();
             }
-
-
-            //myHttpWebResponse.Close();
 
             return pageContent;
         }
