@@ -146,7 +146,7 @@ namespace OOP_lab
                 }
                 set
                 {
-                    if (value >= 0 && value <= 32)
+                    if (value >= 1 && value <= 32)
                     {
                         byte days = (byte)(28 + ((0x3bbeecc >> (((int)this.month) * 2)) & 3));
 
@@ -176,7 +176,7 @@ namespace OOP_lab
                 }
                 set
                 {
-                    if (value >= 0 && value <= 12)
+                    if (value >= 1 && value <= 12)
                     {
                         if (value == 12)
                         {
@@ -252,6 +252,7 @@ namespace OOP_lab
 
             public static bool operator !=(Date date1, Date date2)
             {
+                // Оправданно?
                 return !(date1 == date2);
             }
 
@@ -319,7 +320,7 @@ namespace OOP_lab
 
             public static Date GetDate(short number, short year)
             {
-                byte Month = 0;
+                byte Month = 1;
                 byte DaysInMonth = GetDaysInMonth(Month);
 
                 while (number > DaysInMonth)
@@ -362,7 +363,12 @@ namespace OOP_lab
 
             public static byte GetDaysInMonth(byte month)
             {
-                byte days;
+                byte days = 0;
+
+                if (month < 1 || month > 12)
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
 
                 switch (month+1)
                 {
@@ -383,9 +389,6 @@ namespace OOP_lab
                         break;
                     case 2:
                         days = 28;
-                        break;
-                    default:
-                        days = 0;
                         break;
                 }
 
