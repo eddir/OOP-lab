@@ -73,7 +73,7 @@ namespace OOP_lab
                         }
                     } else
                     {
-                        throw new ArgumentException("Недопутимый элемент массива с нулевым значением.");
+                        throw new ArgumentException("Недопустимый элемент массива с нулевым значением.");
                     }
                 }
                 i++;

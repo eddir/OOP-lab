@@ -55,7 +55,10 @@ namespace OOP_lab
             try
             {
                 Console.WriteLine("\nЗапрашиваю данные...\n");
-                JArray units = JArray.Parse(HttpGetRequest("http://data.kzn.ru:8082/api/v0/dynamic_datasets/bus.json"));
+
+                String url = Program.TEST_MODE ? "http://data.kzn.ru:8082/api/v0/dynamic_datasets/bus.json" : "http://rostkov.pro/kzn-api.txt";
+
+                JArray units = JArray.Parse(HttpGetRequest(url));
 
                 // Можно было проще?
                 /* Список автобусов с их характеристиками */
@@ -207,18 +210,21 @@ namespace OOP_lab
             requestStream.Write(data, 0, data.Length);
             requestStream.Close();
 
-            HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+            string pageContent;
 
-            Stream responseStream = myHttpWebResponse.GetResponseStream();
+            using (HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse()) {
 
-            StreamReader myStreamReader = new StreamReader(responseStream, Encoding.Default);
+                Stream responseStream = myHttpWebResponse.GetResponseStream();
 
-            string pageContent = myStreamReader.ReadToEnd();
+                StreamReader myStreamReader = new StreamReader(responseStream, Encoding.Default);
 
-            myStreamReader.Close();
-            responseStream.Close();
+                pageContent = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                responseStream.Close();
+            }
 
-            myHttpWebResponse.Close();
+
+            //myHttpWebResponse.Close();
 
             return pageContent;
         }

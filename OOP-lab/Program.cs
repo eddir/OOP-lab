@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
 using Task = OOP_lab.Task;
 
 namespace OOP
@@ -11,11 +9,13 @@ namespace OOP
     class Program
     {
         // Включить ли режим быстрой отладки
-        static public readonly bool TEST_MODE = false;
+        public const bool TEST_MODE = false;
+        
+        private const byte DEFAULT_TASK = 9;
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Лабораторные работа по дисциплине \"Объетно ориентированное программирование\"");
+            Console.WriteLine("Лабораторные работы по дисциплине \"Объектно ориентированное программирование\"");
             Console.WriteLine("Выполнил студент группы бПИНЖ21 Ростков Э.А.");
 
             List<Task> tasks = new List<Task>{
@@ -27,58 +27,67 @@ namespace OOP
                 new Task9(),
             };
 
-            for (int i = 0; i < tasks.Count; i++)
+            while (true)
             {
-                Console.WriteLine("{0}. {1}", tasks[i].getNumber(), tasks[i].getDescription());
-            }
-            Console.WriteLine("");
-
-            byte task;
-
-            try
-            {
-                if (!TEST_MODE)
+                for (int i = 0; i < tasks.Count; i++)
                 {
-                    task = byte.Parse(Console.ReadLine());
+                    Console.WriteLine("{0}. {1}", tasks[i].getNumber(), tasks[i].getDescription());
                 }
-                else
-                {
-                    task = 8;
-                }
-            }
-            catch
-            {
-                Console.WriteLine("Введено неверное значение. Будет использовано значение по умолчанию (4).");
-                task = 4;
-            }
+                Console.WriteLine("");
 
-            try
-            {
-                bool exc = false;
-                foreach (Task t in tasks)
+                byte task;
+
+                try
                 {
-                    if (t.getNumber() == task)
+                    if (!TEST_MODE)
                     {
-                        t.Start();
-                        exc = true;
+                        task = byte.Parse(Console.ReadKey().KeyChar.ToString());
+                        Console.WriteLine();
+                    }
+                    else
+                    {
+                        task = DEFAULT_TASK;
                     }
                 }
-                if (!exc)
+                catch
                 {
-                    Console.WriteLine("Задача не найдена.");
+                    Console.WriteLine("Введено неверное значение. Будет использовано значение по умолчанию (4).");
+                    task = DEFAULT_TASK;
                 }
-            }
-            catch (Exception e)
-            {
-                var st = new StackTrace(e, true);
-                // Get the top stack frame
-                var frame = st.GetFrame(0);
-                // Get the line number from the stack frame
-                var line = frame.GetFileLineNumber();
-                Console.WriteLine("Произошла неизвестная ошибка. \n{0} \n{1}, {2}", e.Message, frame, line);
-            }
 
-            Console.WriteLine("\n");
+                if (task == 0)
+                {
+                    break;
+                }
+
+                try
+                {
+                    bool exc = false;
+                    foreach (Task t in tasks)
+                    {
+                        if (t.getNumber() == task)
+                        {
+                            t.Start();
+                            exc = true;
+                        }
+                    }
+                    if (!exc)
+                    {
+                        Console.WriteLine("Задача не найдена.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    var st = new StackTrace(e, true);
+                    // Get the top stack frame
+                    var frame = st.GetFrame(0);
+                    // Get the line number from the stack frame
+                    var line = frame.GetFileLineNumber();
+                    Console.WriteLine("Произошла неизвестная ошибка. \n{0} \n{1}, {2}", e.Message, frame, line);
+                }
+
+                Console.WriteLine("\n");
+            }
         }
 
         public static byte[] RandomArray(int size, int max)
@@ -149,6 +158,66 @@ namespace OOP
             Console.BackgroundColor = ConsoleColor.Black;
             Console.WriteLine(message);
             Console.WriteLine("{2}\nОписание ошибки: {0}\nИсточник: {1}", exception.Message, exception.Source, exception.GetType().Name);
+        }
+
+        public static DateTime RandomDate()
+        {
+            Random rnd = new Random();
+
+            byte day = (byte)((rnd.Next() % 28) + 1);
+            byte month = (byte)((rnd.Next() % 12) + 1);
+            short year = (short)((rnd.Next() % 200) + 1900);
+
+            return new DateTime(year, month, day);
+        }
+
+        public static string RandomFio()
+        {
+            string[] fio = {
+                    "Данилов Мирослав Андреевич",
+                    "Миронов Кондрат Семёнович",
+                    "Тихонов Альфред Артёмович",
+                    "Данилов Май Дамирович",
+                    "Вишняков Владимир Мартынович",
+                    "Степанов Аввакуум Адольфович",
+                    "Лукин Герман Еремеевич",
+                    "Гурьев Александр Макарович",
+                    "Емельянов Алексей Глебович",
+                    "Белоусов Остап Серапионович",
+                    "Симонов Харитон Алексеевич",
+                    "Соколов Карл Вадимович",
+                    "Фролов Вадим Фролович",
+                    "Дорофеев Самуил Игнатьевич",
+                    "Русаков Ираклий Александрович",
+                    "Дмитриев Варлам Лукьянович",
+                    "Рябов Гарри Константинович",
+                    "Блохин Харитон Якунович",
+                    "Дементьев Прохор Рудольфович",
+                    "Колесников Пантелеймон Данилович",
+                    "Новикова Снежана Всеволодовна",
+                    "Беспалова Евгения Ивановна",
+                    "Григорьева Василиса Михаиловна",
+                    "Воронова Индира Авксентьевна",
+                    "Никитина Венера Робертовна",
+                    "Тарасова Лея Георгьевна",
+                    "Носкова Юлиана Викторовна",
+                    "Суворова Любовь Адольфовна",
+                    "Михеева Доля Христофоровна",
+                    "Суворова Евдокия Наумовна",
+                    "Лапина Николь Ярославовна",
+                    "Горбунова Дарьяна Созоновна",
+                    "Ефремова Зара Львовна",
+                    "Турова Илена Львовна",
+                    "Муравьёва Устинья Кирилловна",
+                    "Попова Агнесса Даниловна",
+                    "Фокина Сусанна Феликсовна",
+                    "Фокина Анфиса Давидовна",
+                    "Шубина Эдуарда Юрьевна",
+                };
+
+            Random rnd = new Random();
+
+            return fio[(byte)(rnd.Next() % fio.Length)];
         }
 
     }
