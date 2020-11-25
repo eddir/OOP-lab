@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace OOP_lab
@@ -9,12 +10,12 @@ namespace OOP_lab
     /// <summary>
     /// Задача 11 - интерфейсы
     /// </summary>
-    class Task11 : Task
+    class Task12 : Task
     {
-        public Task11()
+        public Task12()
         {
-            number = 'c';
-            description = "В классе  ДАТА реализовать интерфейсы IComparable и IComparer и переопределить операции сравнения для дат.";
+            number = 'd';
+            description = "Работа с файлами.";
         }
 
         public override void Start()
@@ -24,16 +25,18 @@ namespace OOP_lab
             while (true)
             {
                 Console.WriteLine("Выберите пункт:");
-                Console.WriteLine("1. Ввод новых дат.");
-                Console.WriteLine("2. Удаление даты.");
-                Console.WriteLine("3. Дата через номер дня в году.");
-                Console.WriteLine("4. Поиск наибольшой даты.");
-                Console.WriteLine("5. Сортировка даты по полной дате.");
-                Console.WriteLine("6. Сортировка даты по году.");
-                Console.WriteLine("7. Вывод дат.");
-                Console.WriteLine("8. Выход.");
+                Console.WriteLine("1. Ввод новых дат в ручную.");
+                Console.WriteLine("2. Ввод новых дат из файла.");
+                Console.WriteLine("3. Удаление даты.");
+                Console.WriteLine("4. Дата через номер дня в году.");
+                Console.WriteLine("5. Поиск наибольшой даты.");
+                Console.WriteLine("6. Сортировка даты по полной дате.");
+                Console.WriteLine("7. Сортировка даты по году.");
+                Console.WriteLine("8. Сохранить данные в файл.");
+                Console.WriteLine("9. Вывод дат.");
+                Console.WriteLine("10. Выход.");
 
-                byte option = byte.Parse(Console.ReadKey().KeyChar.ToString());
+                byte option = byte.Parse(Console.ReadLine());
                 Console.WriteLine();
 
                 // Ввод новых студентов
@@ -80,15 +83,35 @@ namespace OOP_lab
                     }
                     DumpDates(Dates);
                 }
-                // Удаление студента.
+                // Ввод новых дат из файла
                 else if (option == 2)
+                {
+                    Console.WriteLine("Введите путь до файла (по умолчанию './input.txt'):");
+                    string path = Console.ReadLine();
+
+                    if (path.Trim() == "")
+                    {
+                        path = "./input.txt";
+                    }
+
+                    try
+                    {
+                        Dates = Date.FromFile(path);
+                        DumpDates(Dates);
+                    } catch (ArgumentException)
+                    {
+                        Console.WriteLine("Файл не существует или повреждён.");
+                    }
+                }
+                // Удаление студента.
+                else if (option == 3)
                 {
                     Console.WriteLine("Для удаления даты введите её:");
                     Dates = Date.RemoveDate(Dates, Console.ReadLine());
                     DumpDates(Dates);
                 }
                 // Дата через номер дня в году
-                else if (option == 3)
+                else if (option == 4)
                 {
                     Console.WriteLine("Введите номер дня:");
                     short number = short.Parse(Console.ReadLine());
@@ -101,30 +124,46 @@ namespace OOP_lab
                     date.Dump();
                 }
                 // Поиск поздней даты
-                else if (option == 4)
+                else if (option == 5)
                 {
                     Date.FindOlder(Dates).Dump();
                 }
                 // Сортировка дат по полной дате
-                else if (option == 5)
+                else if (option == 6)
                 {
                     Dates.Sort();
                     DumpDates(Dates);
                 }
                 // Сортировка даты по году
-                else if (option == 6)
+                else if (option == 7)
                 {
                     // Как иначе?
                     Dates.Sort((x, y) => x.Year.CompareTo(y.Year));
                     DumpDates(Dates);
                 }
+                // Сохранить данные в файл
+                else if (option == 8)
+                {
+                    Console.WriteLine("Введите путь до файла (по умолчанию './input.txt'):");
+                    string path = Console.ReadLine();
+
+                    if (path.Trim() == "")
+                    {
+                        path = "./input.txt";
+                    }
+
+                    Date.DumpFile(Dates, path);
+
+                    Console.WriteLine("Данные сохранены");
+                }
                 // Вывод всех дат
-                else if (option == 7)
+                else if (option == 9)
                 {
                     DumpDates(Dates);
                 }
+
                 // Выход
-                else if (option == 8)
+                else if (option == 10)
                 {
                     break;
                 }
@@ -325,7 +364,8 @@ namespace OOP_lab
                             return this.Year == date.Year ? 0 : (this.Year > date.Year ? 1 : -1);
                         }
                     }
-                } else
+                }
+                else
                 {
                     throw new ArgumentException("Object is not a Date");
                 }
@@ -343,11 +383,11 @@ namespace OOP_lab
                 if (x.GetType() == typeof(Date))
                 {
                     // DRY принцип
-                    return ((Date) x).CompareTo(y);
+                    return ((Date)x).CompareTo(y);
                 }
                 else if (y.GetType() == typeof(Date))
                 {
-                    return ((Date) y).CompareTo(x);
+                    return ((Date)y).CompareTo(x);
                 }
 
                 return 0;
@@ -410,9 +450,75 @@ namespace OOP_lab
                 return date;
             }
 
+            /// <summary>
+            /// Ввод дат из файла
+            /// </summary>
+            /// <param name="path">Полный путь до файла</param>
+            /// <returns>Список экземпляров класса Date</returns>
+            /// <exception cref="ArgumentException"></exception>
+            public static List<Date> FromFile(string path)
+            {
+                List<Date> dates = new List<Date> { };
+
+                try
+                {
+                    StreamReader f1 = new StreamReader(path); // входной поток
+                    string st;
+                    string[] buf;
+                    while ((st = f1.ReadLine()) != null) // чтение из файла
+                    {
+                        try
+                        {
+                            buf = st.Split(' ');
+                            dates.Add(new Date(byte.Parse(buf[0]), byte.Parse(buf[1]), short.Parse(buf[2])));
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+
+                    f1.Close();
+
+                }
+                catch
+                {
+                    // Уместно throw внутри catch?
+                    throw new ArgumentException("File at the given path not found or corrupted.");
+                }
+
+                return dates;
+            }
+
             public void Dump()
             {
                 Console.WriteLine((string)this);
+            }
+
+            /// <summary>
+            /// Запись массива дат в файл
+            /// </summary>
+            /// <param name="dates">Список дат</param>
+            /// <param name="path">Полный путь до файла</param>
+            public static void DumpFile(List<Date> dates, string path)
+            {
+                try
+                {
+                    StreamWriter f = new StreamWriter(path);
+
+                    foreach (Date date in dates)
+                        f.WriteLine(string.Format("{0} {1} {2}", date.Day, date.Month, date.Year));
+
+                    f.Close();
+                }
+                catch (FileNotFoundException e)
+                { 
+                    Console.WriteLine(e.Message); Console.WriteLine("Проверьте правильность имени файла"); 
+                }
+                catch (Exception e)
+                { 
+                    Console.WriteLine("Error: " + e.Message); 
+                }
             }
 
             public static Date GetDate(short number, short year)

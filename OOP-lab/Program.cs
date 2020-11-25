@@ -28,6 +28,7 @@ namespace OOP
                 new Task9_1(),
                 new Task10(),
                 new Task11(),
+                new Task12(),
             };
 
             while (true)

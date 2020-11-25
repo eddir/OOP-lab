@@ -25,7 +25,7 @@ namespace OOP_lab
                 Console.WriteLine("2. Удаление студента.");
                 Console.WriteLine("3. Разница в возрасте.");
                 Console.WriteLine("4. Поиск по группам.");
-                Console.WriteLine("5. вывод студентов.");
+                Console.WriteLine("5. Вывод студентов.");
                 Console.WriteLine("6. Выход.");
 
                 byte option = byte.Parse(Console.ReadKey().KeyChar.ToString());
