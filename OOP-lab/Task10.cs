@@ -115,10 +115,14 @@ namespace OOP_lab
                 {
                     comment.Dump();
                 }
+                // Выход
+                else if (option == 8)
+                {
+                    break;
+                }
                 else
                 {
-                    Console.WriteLine("Выход в главное меню.");
-                    return;
+                    Console.WriteLine("Пункт не найден.");
                 }
                 Console.WriteLine();
             }

@@ -1,19 +1,20 @@
 ﻿using OOP;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace OOP_lab
 {
-    class Task9_1 : Task
+    /// <summary>
+    /// Задача 11 - интерфейсы
+    /// </summary>
+    class Task11 : Task
     {
-        /// <summary>
-        /// Задача 9 - описание классов
-        /// </summary>
-        public Task9_1()
+        public Task11()
         {
-            number = 'a';
-            description = "Описание классов (описать класс ДАТА)";
+            number = 'c';
+            description = "В классе  ДАТА реализовать интерфейсы IComparable и IComparer и переопределить операции сравнения для дат.";
         }
 
         public override void Start()
@@ -27,8 +28,10 @@ namespace OOP_lab
                 Console.WriteLine("2. Удаление даты.");
                 Console.WriteLine("3. Дата через номер дня в году.");
                 Console.WriteLine("4. Поиск наибольшой даты.");
-                Console.WriteLine("5. вывод дат.");
-                Console.WriteLine("6. Выход.");
+                Console.WriteLine("5. Сортировка даты по полной дате.");
+                Console.WriteLine("6. Сортировка даты по году.");
+                Console.WriteLine("7. вывод дат.");
+                Console.WriteLine("8. Выход.");
 
                 byte option = byte.Parse(Console.ReadKey().KeyChar.ToString());
                 Console.WriteLine();
@@ -102,13 +105,26 @@ namespace OOP_lab
                 {
                     Date.FindOlder(Dates).Dump();
                 }
-                // Вывод всех дат
+                // Сортировка дат по полной дате
                 else if (option == 5)
+                {
+                    Dates.Sort();
+                    DumpDates(Dates);
+                }
+                // Сортировка даты по году
+                else if (option == 6)
+                {
+                    // Как иначе?
+                    Dates.Sort((x, y) => x.Year.CompareTo(y.Year));
+                    DumpDates(Dates);
+                }
+                // Вывод всех дат
+                else if (option == 7)
                 {
                     DumpDates(Dates);
                 }
                 // Выход
-                else if (option == 6)
+                else if (option == 8)
                 {
                     break;
                 }
@@ -119,21 +135,27 @@ namespace OOP_lab
                 Console.WriteLine();
             }
 
-            static void DumpDates(List<Date> dates)
-            {
+        }
 
-                Console.WriteLine("Введённые данные:");
-                foreach (Date date in dates)
-                {
-                    date.Dump();
-                }
+        /// <summary>
+        /// Выводит массив дат в консоль
+        /// </summary>
+        /// <param name="dates"></param>
+        static void DumpDates(List<Date> dates)
+        {
+
+            Console.WriteLine("Введённые данные:");
+            foreach (Date date in dates)
+            {
+                date.Dump();
             }
+
         }
 
         /// <summary>
         /// Класс для работы с датой
         /// </summary>
-        class Date
+        class Date : IComparable, IComparer
         {
             /// <summary>
             /// Число
@@ -236,63 +258,99 @@ namespace OOP_lab
 
             public static bool operator >(Date date1, Date date2)
             {
-                if (date1.Year == date2.Year)
-                {
-                    if (date1.Month == date2.Month)
-                    {
-                        return date1.Day > date2.Day ? true : false;
-                    } else
-                    {
-                        return date1.Month > date2.Month ? true : false;
-                    }
-                } else
-                {
-                    return date1.Year > date2.Year ? true : false;
-                }
+                return date1.CompareTo(date2) == 1;
             }
 
             public static bool operator <(Date date1, Date date2)
             {
-                return date2 > date1 && !date1.Equals(date2);
+                return date2.CompareTo(date1) == 1;
             }
 
             public static bool operator ==(Date date1, Date date2)
             {
-                return date1.Equals(date2);
+                return date1 is Date && date2 is Date && date1.Year == date2.Year && date1.Month == date2.Month && date1.Day == date2.Day;
             }
 
             public static bool operator !=(Date date1, Date date2)
             {
-                // Оправданно?
-                return !date1.Equals(date2);
+                return !(date1 == date2);
             }
 
             /// <summary>
-            /// Сравнение дат
-            /// </summary>
-            /// <param name="date"></param>
-            /// <returns></returns>
-            public bool Equals(Date date)
-            {
-                return this.Year == date.Year && this.Month == date.Month && this.Day == date.Day;
-            }
-            
-            /// <summary>
-            /// Сравнение даты объектом
+            /// Сравнение даты с объектом
             /// </summary>
             /// <param name="obj"></param>
             /// <returns></returns>
             public override bool Equals(Object obj)
             {
-                // оправданно? Не конфликует с Equals(Date date) ?
-                // P.S. В задании 11 вопрос прояснился
-                // TODO: нормализовать Equals к общему стандарту
-                return false;
+                return obj is Date && this == (Date)obj;
             }
 
             public override int GetHashCode()
             {
-                return base.GetHashCode();
+                return Tuple.Create(this.day, this.month, this.year).GetHashCode();
+            }
+
+            /// <summary>
+            /// Сравнение дат
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public int CompareTo(object obj)
+            {
+                if (obj == null) return 1;
+
+                Date date = obj as Date;
+                if (date != null)
+                {
+                    if (this.Equals(obj))
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        if (this.Year == date.Year)
+                        {
+                            if (this.Month == date.Month)
+                            {
+                                return this.Day == date.Day ? 0 : (this.Day > date.Day ? 1 : -1);
+                            }
+                            else
+                            {
+                                return this.Month == date.Month ? 0 : (this.Month > date.Month ? 1 : -1);
+                            }
+                        }
+                        else
+                        {
+                            return this.Year == date.Year ? 0 : (this.Year > date.Year ? 1 : -1);
+                        }
+                    }
+                } else
+                {
+                    throw new ArgumentException("Object is not a Date");
+                }
+            }
+
+            /// <summary>
+            /// Сравнение дат
+            /// </summary>
+            /// <param name="x"></param>
+            /// <param name="y"></param>
+            /// <returns></returns>
+            public int Compare(object x, object y)
+            {
+                // Оправданно?
+                if (x.GetType() == typeof(Date))
+                {
+                    // DRY принцип
+                    return ((Date) x).CompareTo(y);
+                }
+                else if (y.GetType() == typeof(Date))
+                {
+                    return ((Date) y).CompareTo(x);
+                }
+
+                return 0;
             }
 
             public static explicit operator string(Date date)
@@ -354,7 +412,7 @@ namespace OOP_lab
 
             public void Dump()
             {
-                Console.WriteLine((string) this);
+                Console.WriteLine((string)this);
             }
 
             public static Date GetDate(short number, short year)
@@ -368,7 +426,7 @@ namespace OOP_lab
                     DaysInMonth = GetDaysInMonth(++Month);
                 }
 
-                return new Date((byte) number, Month, year);
+                return new Date((byte)number, Month, year);
             }
 
             public static Date FindOlder(List<Date> dates)
@@ -409,7 +467,7 @@ namespace OOP_lab
                     throw new ArgumentOutOfRangeException();
                 }
 
-                switch (month+1)
+                switch (month + 1)
                 {
                     case 1:
                     case 3:
