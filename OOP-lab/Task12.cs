@@ -8,7 +8,7 @@ using System.Text;
 namespace OOP_lab
 {
     /// <summary>
-    /// Задача 11 - интерфейсы
+    /// Задача 12 - работа с файлами
     /// </summary>
     class Task12 : Task
     {
