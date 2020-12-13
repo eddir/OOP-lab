@@ -131,7 +131,7 @@ namespace OOP_lab
                 // Сортировка дат по полной дате
                 else if (option == 6)
                 {
-                    Dates.Sort();
+                    Dates.Sort(new Date.SortByYear());
                     DumpDates(Dates);
                 }
                 // Сортировка даты по году
@@ -264,7 +264,7 @@ namespace OOP_lab
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("Month should be beetwen 0 and 11.");
+                        throw new ArgumentOutOfRangeException("Month should be beetwen 1 and 12.");
                     }
                 }
             }
@@ -393,6 +393,14 @@ namespace OOP_lab
                 return 0;
             }
 
+            public class SortByYear : IComparer<Date>
+            {
+                public int Compare(Date d1, Date d2)
+                {
+                    return d1.year.CompareTo(d2.year);
+                }
+            }
+
             public static explicit operator string(Date date)
             {
                 return string.Format("{0}.{1}.{2}", date.Day, date.Month, date.Year);
@@ -429,9 +437,9 @@ namespace OOP_lab
 
             public void SetDate(DateTime date)
             {
-                this.Day = (byte)date.Day;
-                this.Month = (byte)date.Month;
                 this.Year = (short)date.Year;
+                this.Month = (byte)date.Month;
+                this.Day = (byte)date.Day;
             }
 
             public static Date FromKeyboard()
