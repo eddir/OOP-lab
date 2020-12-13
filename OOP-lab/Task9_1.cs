@@ -160,11 +160,11 @@ namespace OOP_lab
                 {
                     if (value >= 1 && value <= 32)
                     {
-                        byte days = (byte)(28 + ((0x3bbeecc >> (((int)this.month) * 2)) & 3));
+                        byte days = Date.GetDaysInMonth(this.month);
 
                         if (value > days)
                         {
-                            this.day = 1;
+                            this.day = (byte)(value - days);
                             this.Month = ++this.month;
                         }
                         else
@@ -192,7 +192,7 @@ namespace OOP_lab
                     {
                         if (value == 12)
                         {
-                            this.month = 0;
+                            this.month = 1;
                             this.Year = ++this.Year;
                         }
                         else
@@ -409,7 +409,7 @@ namespace OOP_lab
                     throw new ArgumentOutOfRangeException();
                 }
 
-                switch (month+1)
+                switch (month)
                 {
                     case 1:
                     case 3:
