@@ -240,14 +240,14 @@ namespace OOP_lab
                 {
                     if (date1.Month == date2.Month)
                     {
-                        return date1.Day > date2.Day ? true : false;
+                        return date1.Day > date2.Day;
                     } else
                     {
-                        return date1.Month > date2.Month ? true : false;
+                        return date1.Month > date2.Month;
                     }
                 } else
                 {
-                    return date1.Year > date2.Year ? true : false;
+                    return date1.Year > date2.Year;
                 }
             }
 
